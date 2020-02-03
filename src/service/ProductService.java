@@ -1,5 +1,7 @@
 package service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 
 import domain.Product;
@@ -18,5 +20,13 @@ public class ProductService {
 
 	public Product findByID(Long id) {
 		return Optional.of(repository.findProductByID(id)).get();
+	}
+
+	public void calculatePriceAftedDiscount(Product product) {
+		validationService.validateDiscount(product);
+		BigDecimal discountAmount = product.getPrice().multiply(product.getDiscount().divide(BigDecimal.valueOf(100)));
+		discountAmount = discountAmount.setScale(2, RoundingMode.HALF_UP);
+		BigDecimal priceAfterDiscount = product.getPrice().subtract(discountAmount);
+		product.setPrice(priceAfterDiscount);
 	}
 }
