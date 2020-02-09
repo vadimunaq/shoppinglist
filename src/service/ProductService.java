@@ -25,7 +25,7 @@ public class ProductService {
 	public void calculatePriceAftedDiscount(Product product) {
 		validationService.validateDiscount(product);
 		BigDecimal discountAmount = product.getPrice().multiply(product.getDiscount().divide(BigDecimal.valueOf(100)));
-		discountAmount = discountAmount.setScale(2, RoundingMode.HALF_UP);
+		discountAmount = discountAmount.setScale(2, RoundingMode.HALF_EVEN);
 		BigDecimal priceAfterDiscount = product.getPrice().subtract(discountAmount);
 		product.setPrice(priceAfterDiscount);
 	}
